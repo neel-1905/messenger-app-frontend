@@ -1,6 +1,6 @@
 import { themes } from "@/constants/theme";
-import { useColorScheme } from "react-native";
 import { VariableContextProvider } from "nativewind";
+import { useColorScheme } from "react-native";
 
 export function ThemeProvider({
   name,
@@ -10,7 +10,7 @@ export function ThemeProvider({
   children: React.ReactNode;
 }) {
   const colorScheme = useColorScheme() ?? "light";
- 
+
   return (
     <VariableContextProvider value={themes[name][colorScheme]}>
       {children}

@@ -41,6 +41,12 @@
   --color-away: #f59e0b;
 
   --color-message-hover: #f3f4f6;
+
+  /* fonts */
+  --font-sans: Inter_400Regular;
+  --font-medium: Inter_500Medium;
+  --font-semibold: Inter_600SemiBold;
+  --font-bold: Inter_700Bold;
 }
 
 :root {
@@ -80,4 +86,10 @@
   --color-away: #f59e0b;
 
   --color-message-hover: #f3f4f6;
+
+  /* fonts */
+  --font-sans: Inter_400Regular;
+  --font-medium: Inter_500Medium;
+  --font-semibold: Inter_600SemiBold;
+  --font-bold: Inter_700Bold;
 }

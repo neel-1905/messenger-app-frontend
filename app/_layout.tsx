@@ -1,3 +1,4 @@
+import { useThemeColor } from "@/hooks/useThemeColors.hook";
 import { QueryProvider } from "@/providers/query-provider";
 import { ThemeProvider } from "@/providers/theme-provider";
 import {
@@ -26,6 +27,8 @@ export default function RootLayout() {
     Inter_900Black,
   });
 
+  const colors = useThemeColor();
+
   useEffect(() => {
     if (fontsLoaded || error) {
       SplashScreen.hideAsync();
@@ -44,7 +47,14 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider name="midnight">
         <QueryProvider>
-          <Stack />
+          <Stack
+            screenOptions={{
+              headerShown: false,
+              contentStyle: {
+                backgroundColor: colors.background,
+              },
+            }}
+          />
         </QueryProvider>
       </ThemeProvider>
     </GestureHandlerRootView>
