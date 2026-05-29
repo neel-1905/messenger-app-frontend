@@ -2,6 +2,7 @@ import AppLogo from "@/components/common/app-logo";
 import { AppScreen } from "@/components/ui/app-screen";
 import { AppText } from "@/components/ui/app-text";
 import RegisterForm from "@/features/auth/ui/register-form";
+import { Link } from "expo-router";
 import React from "react";
 import { View } from "react-native";
 
@@ -16,6 +17,13 @@ export default function RegisterScreen() {
       </View>
 
       <RegisterForm />
+
+      <Link href="/login" className="-mt-4 text-center will-change-variable">
+        <AppText className="text-muted-foreground text-sm">
+          Already have an account?{" "}
+          <AppText className="text-primary font-semibold">Login</AppText>
+        </AppText>
+      </Link>
     </AppScreen>
   );
 }
