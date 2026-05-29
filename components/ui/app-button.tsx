@@ -54,7 +54,11 @@ export function AppButton({
       <AppText
         className={`font-semibold ${labelStyles[variant]} ${labelSizeStyles[size]}`}
       >
-        {loading ? <LoaderCircle className="animate-spin" /> : children}
+        {loading ? (
+          <LoaderCircle color="white" className="animate-spin" />
+        ) : (
+          children
+        )}
       </AppText>
     </StyledTouchableOpacity>
   );

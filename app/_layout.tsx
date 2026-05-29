@@ -1,6 +1,7 @@
 import { useThemeColor } from "@/hooks/useThemeColors.hook";
 import { QueryProvider } from "@/providers/query-provider";
 import { ThemeProvider } from "@/providers/theme-provider";
+import { ToastProvider } from "@/providers/toast-provider";
 import {
   Inter_400Regular,
   Inter_400Regular_Italic,
@@ -47,14 +48,16 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider name="midnight">
         <QueryProvider>
-          <Stack
-            screenOptions={{
-              headerShown: false,
-              contentStyle: {
-                backgroundColor: colors.background,
-              },
-            }}
-          />
+          <ToastProvider>
+            <Stack
+              screenOptions={{
+                headerShown: false,
+                contentStyle: {
+                  backgroundColor: colors.background,
+                },
+              }}
+            />
+          </ToastProvider>
         </QueryProvider>
       </ThemeProvider>
     </GestureHandlerRootView>

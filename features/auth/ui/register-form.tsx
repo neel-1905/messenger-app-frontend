@@ -1,17 +1,26 @@
 import AppTextInput from "@/components/inputs/app-text-input";
 import { AppButton } from "@/components/ui/app-button";
 import { authClient } from "@/lib/auth-client";
+import { useToast } from "@/providers/toast-provider";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { router } from "expo-router";
+import { EyeIcon, EyeOffIcon } from "lucide-react-native";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { RegisterFormData, registerSchema } from "../lib/register.validation";
 
 export default function RegisterForm() {
+  const [passwordsVisible, setPasswordsVisible] = React.useState({
+    password: false,
+    confirmPassword: false,
+  });
+  const { showToast } = useToast();
+
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -24,6 +33,13 @@ export default function RegisterForm() {
     mode: "onChange",
   });
 
+  const handleTogglePassword = (key: "password" | "confirmPassword") => {
+    setPasswordsVisible((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
+
   const handleRegister = async (data: RegisterFormData) => {
     const { data: signUpData, error } = await authClient.signUp.email({
       name: data.name,
@@ -32,11 +48,21 @@ export default function RegisterForm() {
     });
 
     if (error) {
-      console.log(error);
+      showToast({
+        type: "error",
+        title: "Error",
+        message: error.message,
+      });
       return;
     }
 
-    console.log(signUpData);
+    showToast({
+      type: "success",
+      title: "Success",
+      message: "User registered successfully",
+    });
+
+    router.push("/login");
   };
 
   return (
@@ -72,22 +98,6 @@ export default function RegisterForm() {
 
       <Controller
         control={control}
-        name="confirmPassword"
-        render={({ field }) => (
-          <AppTextInput
-            label="Confirm Password"
-            value={field.value}
-            onChangeText={field.onChange}
-            placeholder="****"
-            keyboardType="default"
-            secureTextEntry
-            error={errors.confirmPassword?.message}
-          />
-        )}
-      />
-
-      <Controller
-        control={control}
         name="password"
         render={({ field }) => (
           <AppTextInput
@@ -96,13 +106,55 @@ export default function RegisterForm() {
             onChangeText={field.onChange}
             placeholder="****"
             keyboardType="default"
-            secureTextEntry
+            secureTextEntry={!passwordsVisible.password}
             error={errors.password?.message}
+            icon={
+              <TouchableOpacity
+                onPress={() => handleTogglePassword("password")}
+              >
+                {!passwordsVisible.password ? (
+                  <EyeIcon size={20} color="gray" />
+                ) : (
+                  <EyeOffIcon size={20} color="gray" />
+                )}
+              </TouchableOpacity>
+            }
           />
         )}
       />
 
-      <AppButton onPress={handleSubmit((data) => handleRegister(data))}>
+      <Controller
+        control={control}
+        name="confirmPassword"
+        render={({ field }) => (
+          <AppTextInput
+            label="Confirm Password"
+            value={field.value}
+            onChangeText={field.onChange}
+            placeholder="****"
+            keyboardType="default"
+            secureTextEntry={!passwordsVisible.confirmPassword}
+            error={errors.confirmPassword?.message}
+            icon={
+              <TouchableOpacity
+                onPress={() => handleTogglePassword("confirmPassword")}
+              >
+                {!passwordsVisible.confirmPassword ? (
+                  <EyeIcon size={20} color="gray" />
+                ) : (
+                  <EyeOffIcon size={20} color="gray" />
+                )}
+              </TouchableOpacity>
+            }
+          />
+        )}
+      />
+
+      <AppButton
+        loading={isSubmitting}
+        disabled={isSubmitting}
+        onPress={handleSubmit((data) => handleRegister(data))}
+      >
         Register
       </AppButton>
     </View>
